@@ -19,7 +19,7 @@ const Login = () => {
         if(result.data.role ==="admin") {
           navigate("/auth/dashboard")
         } else {
-          navigate("/customer/"+result.data.id, {state: {username: result.data.username}});
+          navigate(`/${result.data.customer_id}`, {state: {username: result.data.username}});
         }
       }
     }
@@ -31,7 +31,7 @@ const Login = () => {
     axios.post(`${url}/customer/customer_login`, values)
     .then(result =>{
       if(result.data.status) {
-        navigate("/customer/"+result.data.id, {state:{username:result.data.username}});
+        navigate(`/${result.data.customer_id}`, {state:{username:result.data.username}});
       } else {
         setError(result.data.error);
       }

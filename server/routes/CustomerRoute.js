@@ -25,6 +25,8 @@ router.get('/:id/project', (req, res)=>{
 
 router.get('/:userId/project/:projId', (req, res)=>{
   const userId = req.params.userId;
+  console.log(userId)
+  console.log(projId)
   const projId = req.params.projId;
   const sql = `SELECT * FROM projects WHERE user_id=(?) AND id=(?)`;
   con.query(sql, [userId, projId], (err, result)=>{
@@ -46,12 +48,12 @@ router.post('/customer_login', (req, res)=>{
         }
         if(response) {
           const token = jwt.sign(
-            {role:"customer", email: result[0].email, id:result[0].id, username:result[0].username},
+            {role:"customer", email: result[0].email, customer_id:result[0].id, username:result[0].username},
             process.env.SECRET_KEY,
             {expiresIn: "1d"}
           );
           res.cookie('token', token);
-          return res.json({status:true, id:result[0].id, username:result[0].username});
+          return res.json({status:true, customer_id:result[0].id, username:result[0].username});
         } else {
           return res.json({status:false, error:"Wrong password"})
         }

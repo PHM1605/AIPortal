@@ -1,8 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import { url } from '../App';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
-const Project = ({projId, projName, typeId}) => {
+const ProjectItem = ({projId, projName, typeId}) => {
   const [projType, setProjType] = useState('');
 
   useEffect(()=>{
@@ -22,12 +23,12 @@ const Project = ({projId, projName, typeId}) => {
         <i className='bi bi-robot fs-1'></i>
       </div>
       
-      <div className='col btn'>
+      <Link to={`${projId}`} className='col btn'>
         <div className='text-secondary'>{projType}</div>
         <h2>{projName}</h2>
-      </div>
+      </Link>
     </div>
   )
 }
 
-export default Project
+export default ProjectItem

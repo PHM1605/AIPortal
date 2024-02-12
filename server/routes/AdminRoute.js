@@ -36,6 +36,7 @@ router.post('/add_customer', (req, res)=>{
 });
 
 router.post('/add_project', (req, res)=>{
+  console.log(req.body)
   const sql = "INSERT INTO projects (name, user_id, type_id) VALUES (?)";
   con.query(sql, [[req.body.name, req.body.user_id, req.body.type_id]], (err, result)=>{
     if(err) return res.json({status:false, error:"Insert db error"});

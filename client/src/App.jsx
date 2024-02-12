@@ -7,6 +7,7 @@ import Signup from './components/Signup';
 import Dashboard from './components/Dashboard';
 import Projects from './components/Projects';
 import AddProject from './components/AddProject';
+import ProjectPanel from './components/ProjectPanel';
 
 const env = 'dev'
 const url = (env==='prd') ? 'https://mintek.top' : 'http://localhost:3000';
@@ -19,8 +20,9 @@ function App() {
         <Route path="/login" element={<Login/>}></Route>
         <Route path="/signup" element={<Signup/>}></Route>
         <Route path="/dashboard" element={<Dashboard/>}></Route>
-        <Route path="/customer/:id" element={<Projects />}></Route>
-        <Route path="/customer/:id/create" element={<AddProject/>}></Route>
+        <Route path="/:customer_id" element={<Projects />}></Route>
+        <Route path="/:customer_id/create" element={<AddProject/>}></Route>
+        <Route path="/:customer_id/:projId" element={<ProjectPanel />}></Route>
       </Routes>
     </BrowserRouter>
   )

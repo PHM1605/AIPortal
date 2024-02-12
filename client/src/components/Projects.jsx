@@ -1,18 +1,18 @@
 import React, {useState, useEffect} from 'react';
 import {Link, useLocation, useParams} from 'react-router-dom';
-import Project from './Project';
+import ProjectItem from './ProjectItem';
 import { url } from '../App';
 import axios from 'axios';
 
 const Projects = () => {
   const location = useLocation();
   const username = location.state.username;
-  const userId = useParams().id;
+  const customer_id = useParams().customer_id;
   const [projects, setProjects] = useState([]);
 
   useEffect(()=>{
     const getProjects = async ()=>{
-      const response = await axios.get(`${url}/customer/${userId}/project`);
+      const response = await axios.get(`${url}/customer/${customer_id}/project`);
       if (response.data.status) {
         setProjects(response.data.result);
       } else {
@@ -51,7 +51,7 @@ const Projects = () => {
       </div>
       <hr/>
       <div className="row d-flex flex-wrap px-4">
-        {projects.map(proj=><Project key={proj.id} projId={proj.id} projName={proj.name} typeId={proj.type_id}/>)}
+        {projects.map(proj=><ProjectItem key={proj.id} projId={proj.id} projName={proj.name} typeId={proj.type_id}/>)}
       </div>
     </div>
   )

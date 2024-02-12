@@ -53,7 +53,7 @@ const verify_user = (req, res, next) => {
 };
 
 app.get('/verify', verify_user, (req, res)=>{
-  return res.json({status:true, role:req.role, id:req.id, username:req.username})
+  return res.json({status:true, role:req.role, customer_id:req.id, username:req.username})
 })
 
 if (process.env.ENV === 'prd') {

@@ -6,7 +6,7 @@ import "../index.css"
 
 const AddProject = () => {
   let {state} = useLocation();
-  let userId = useParams().id;
+  let userId = useParams().customer_id;
   let [projectTypes, setProjectTypes] = useState([]);
   let [project, setProject] = useState({
     name: '',
