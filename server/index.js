@@ -42,7 +42,7 @@ const verify_user = (req, res, next) => {
   if(token) {
     Jwt.verify(token, process.env.SECRET_KEY, (err, decoded)=>{
       if(err) return res.json({status:false, error:"Wrong token"});
-      req.id = decoded.id;
+      req.customer_id = decoded.customer_id;
       req.role = decoded.role;
       req.username = decoded.username
       next();
@@ -53,7 +53,8 @@ const verify_user = (req, res, next) => {
 };
 
 app.get('/verify', verify_user, (req, res)=>{
-  return res.json({status:true, role:req.role, customer_id:req.id, username:req.username})
+  console.log(req)
+  return res.json({status:true, role:req.role, customer_id:req.customer_id, username:req.username})
 })
 
 if (process.env.ENV === 'prd') {
