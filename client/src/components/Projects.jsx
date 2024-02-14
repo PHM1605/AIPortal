@@ -12,7 +12,7 @@ const Projects = () => {
 
   useEffect(()=>{
     const getProjects = async ()=>{
-      const response = await axios.get(`${url}/customer/${customer_id}/project`);
+      const response = await axios.get(`${url}/customer/${customer_id}/projects`);
       if (response.data.status) {
         setProjects(response.data.result);
       } else {

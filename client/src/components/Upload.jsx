@@ -13,27 +13,43 @@ const Upload = () => {
     setImages(event.target.files);
     let tmp = [];
     for (let i=0; i<event.target.files.length; i++) {
-      tmp.push(URL.createObjectURL(event.target.files[i]));
+      tmp.push({id:i, content:URL.createObjectURL(event.target.files[i])});
     }
     setThumbnails(tmp);
   };
 
+  const handleRemoveImg = (event)=>{
+    setThumbnails(thumbnails.filter((thumbnail=>thumbnail.id != event.target.parentNode.id)))
+  }
+
   const handleSubmit = async (event) =>{
     event.preventDefault();
+    const customerInfo = await axios.get(`${url}/customer/${userId}`);
+    const projectInfo = await axios.get(`${url}/customer/${userId}/projects/${projectId}`);
+    let values = {
+      username: customerInfo.data.result[0].username,
+      projName: projectInfo.data.result[0].name
+    };
+    // Delete old images from folder and db
+    await axios.delete(`${url}/customer/${userId}/projects/${projectId}/images`, {data: values});
+    
+    // Upload new images
     const formData = new FormData();
     for(let i=0; i<images.length;i++) {
       formData.append("images", images[i]);
-    }
-    const result_username = await axios.get(`${url}/auth/customer/${userId}`);
-    if(result_username.data.status) {
-      formData.append("result_username", result_username.data.result[0].username);
-    }
-    
-    const result = await axios.post(`${url}/customer/${userId}/project/${projectId}/images`, formData);
-    if (result.data.status) {
-      console.log("OK");
+      formData.append("username",  customerInfo.data.result[0].username);
+      formData.append("projName", projectInfo.data.result[0].name)
+    }    
+    const result_upload = await axios.post(`${url}/customer/${userId}/projects/${projectId}/upload_images`, formData);
+    if (result_upload.data.status) {
+      const result_insert_db = await axios.post(`${url}/customer/${userId}/projects/${projectId}/images`, {data: values});
+      if(result_insert_db.data.status) {
+        console.log("OK");
+      } else {
+        alert(result_insert_db.data.error)
+      }
     } else {
-      alarm(result.data.error);
+      alert(result_upload.data.error);
     }
   }
 
@@ -47,18 +63,20 @@ const Upload = () => {
         </div>
         <div className='d-flex flex-wrap rounded border-start border-end p-4 h-90'>
           {
-            thumbnails.map((thumbnail)=>{
+            thumbnails.map(thumbnail=>{
               return (
-              <div className='m-2'>
-                <img style={{width:"100px", height:"100px"}} alt="" src={thumbnail} className='border rounded'/>
-              </div>
+                <div id={thumbnail.id} key={thumbnail.id} className='m-2' style={{position:"relative" }}>
+                  <img style={{width:"100px", height:"100px"}} alt="" src={thumbnail.content} className='border rounded'/>
+                  <div style={{width:"15px", height:"15px", position:"absolute", top:"5px", right:"5px"}} 
+                    onClick={handleRemoveImg} className='btn d-flex align-items-center justify-content-center bg-danger'>
+                    <i className='bi bi-trash text-white' style={{fontSize:"8px"}}></i>
+                  </div>
+                </div>
               );
             })
           }
         </div>
       </form>
-      
-
     </div>
   )
 }

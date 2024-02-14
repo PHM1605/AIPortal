@@ -10,6 +10,7 @@ import AddProject from './components/AddProject';
 import ProjectPanel from './components/ProjectPanel';
 import Classes from './components/Classes';
 import Upload from './components/Upload';
+import Analyze from './components/Analyze';
 
 const env = 'dev'
 const url = (env==='prd') ? 'https://mintek.top' : 'http://localhost:3000';
@@ -28,6 +29,7 @@ function App() {
           <Route index element={<Navigate to="classes" replace/>} />
           <Route path="classes" element={<Classes/>}></Route>
           <Route path="upload" element={<Upload/>}></Route>
+          <Route path="analyze" element={<Analyze/>}></Route>
         </Route>
       </Routes>
     </BrowserRouter>

@@ -28,16 +28,18 @@ const AddProject = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const values = {
-      'name': project.name,
-      'user_id': userId,
-      'type_id': project.type_id
-    }
-    let result = await axios.post(`${url}/auth/add_project`, values);
-    if(result.data.status) {
-      navigate(-1);
-    } else {
-      alert(result.data.error);
+    let user_result = await axios.get(`${url}/customer/${userId}`);
+    if (user_result.data.status) {
+      let result = await axios.post(`${url}/customer/${userId}/projects`, {
+        'projName': project.name,
+        'username': user_result.data.result[0].username,
+        'type_id': project.type_id
+      });
+      if(result.data.status) {
+        navigate(-1);
+      } else {
+        alert(result.data.error);
+      }
     }
   }
 

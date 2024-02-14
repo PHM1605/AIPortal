@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { url } from '../App';
 import axios from 'axios';
 
@@ -9,11 +9,11 @@ const Classes = () => {
   const [newClass, setNewClass] = useState('');
   const [classes, setClasses] = useState([]);
   const [error, setError] = useState('');
-  // const [txtFile, setTxtFile] = useState();
+  const navigate = useNavigate();
 
   useEffect(()=>{
     const fetchClasses = async ()=>{
-      let result = await(axios.get(`${url}/customer/${userId}/project/${projectId}/classes`));
+      let result = await(axios.get(`${url}/customer/${userId}/projects/${projectId}/classes`));
       if(result.data.status) {
         setClasses(result.data.result);
       } else {
@@ -49,19 +49,17 @@ const Classes = () => {
       setNewClass(reader.result.replaceAll('\n', ','));
     };
     reader.readAsText(uploadTxt)
-    // setTxtFile(uploadTxt);
   }
-
-
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const result_delete = await axios.delete(`${url}/customer/${userId}/project/${projectId}/classes`);
+    const result_delete = await axios.delete(`${url}/customer/${userId}/projects/${projectId}/classes`);
     if (result_delete.data.status) {
       console.log("Delete classes successfully");
-      const result_insert = await axios.post(`${url}/customer/${userId}/project/${projectId}`, {'classes': classes});
+      const result_insert = await axios.post(`${url}/customer/${userId}/projects/${projectId}`, {'classes': classes});
       if(result_insert.data.status) {
         console.log("Insert classes successfully");
+        navigate("../upload");
       } else {
         alert(result.data.error);
       }
@@ -102,7 +100,7 @@ const Classes = () => {
                   <div className='ms-2'>{oneClass.className}</div>
                   <div className='btn btn-sm btn-danger ms-auto' type="button"
                   onClick={handleDelete}>
-                    Remove
+                    <i className='bi bi-trash text-white'></i>
                   </div>
                 </div>
               );

@@ -35,14 +35,6 @@ router.post('/add_customer', (req, res)=>{
   })
 });
 
-router.post('/add_project', (req, res)=>{
-  const sql = "INSERT INTO projects (name, user_id, type_id) VALUES (?)";
-  con.query(sql, [[req.body.name, req.body.user_id, req.body.type_id]], (err, result)=>{
-    if(err) return res.json({status:false, error:"Insert db error"});
-    return res.json({status:true});
-  });
-})
-
 router.get('/project', (req, res)=>{
   const sql = `SELECT * FROM project`;
   con.query(sql, (err, result)=>{
@@ -57,15 +49,6 @@ router.get('/project/:id', (req, res)=>{
   con.query(sql, [typeId], (err, result)=>{
     if(err) return res.json({status:false, error:`Query project type for ID ${typeId} fails`});
     return res.json({status:true, result: result});
-  });
-});
-
-router.get('/customer/:id', (req, res)=>{
-  let customerId = req.params.id;
-  const sql = `SELECT * FROM customer WHERE id=(?)`;
-  con.query(sql, [customerId], (err, result)=>{
-    if(err) return res.json({status:false, error:`Query customer ID ${customerId} fails`});
-    return res.json({status:true, result, result})
   });
 });
 

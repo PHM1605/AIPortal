@@ -25,6 +25,12 @@ const ProjectPanel = () => {
                 <span className="ms-2">Upload</span>
               </NavLink>
             </li>
+            <li className='my-1'>
+              <NavLink to="analyze" className={`nav-link text-white py-3 ${location.pathname.includes('analyze') ? 'active': ''}`}>
+                <i className="bi bi-cloud-arrow-up"></i>
+                <span className="ms-2">Analyze</span>
+              </NavLink>
+            </li>
           </ul>
         </div>
         <div className='col m-0 p-0'>

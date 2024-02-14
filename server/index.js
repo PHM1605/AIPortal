@@ -53,7 +53,6 @@ const verify_user = (req, res, next) => {
 };
 
 app.get('/verify', verify_user, (req, res)=>{
-  console.log(req)
   return res.json({status:true, role:req.role, customer_id:req.customer_id, username:req.username})
 })
 
