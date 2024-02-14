@@ -1,13 +1,30 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { url } from '../App';
 
 const Upload = () => {
+  // to fetch to server
   const [images, setImages] = useState();
+  // to display
   const [thumbnails, setThumbnails] = useState([]);
   const userId = useParams().customer_id;
   const projectId = useParams().projId;
+
+  useEffect(()=>{
+    const fetchImages = async()=>{
+      const result = await axios.get(`${url}/customer/${userId}/projects/${projectId}/images`);
+      if (result.data.status) {
+        const tmpImagesPaths = result.data.result.map((oneImg)=>oneImg.path);
+        let tmp = []
+        tmpImagesPaths.forEach((oneImgPath, idx)=>{
+          tmp.push({id:idx, content:`${url}/${oneImgPath}`});
+        });
+        setThumbnails(tmp);
+      }
+    }
+    fetchImages();
+  }, [])
 
   const handleChooseImages = (event)=>{
     setImages(event.target.files);

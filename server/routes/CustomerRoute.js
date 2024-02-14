@@ -66,7 +66,8 @@ router.get('/:userId/projects/:projId/images', (req, res)=>{
   const projId = req.params.projId;
   const sql = `SELECT * FROM images WHERE project_id=(?)`;
   con.query(sql, [projId], (err, result)=>{
-    return res.json({status:false, result:result})
+    if(err) return res.json({status:false, error:`Query images of project ${projId} fails`});
+    return res.json({status:true, result:result});
   })
 });
 
@@ -132,6 +133,7 @@ router.post("/:userId/projects/:projId", (req,res)=>{
   });
 });
 
+// Upload from frontend to tmp, then move to user's folder
 router.post("/:userId/projects/:projId/upload_images", upload.array('images'), (req, res)=>{
   let username = '';
   let projName = '';
@@ -142,8 +144,6 @@ router.post("/:userId/projects/:projId/upload_images", upload.array('images'), (
     username = req.body.username[0];
     projName = req.body.projName[0];
   }
-  
-  // Upload from frontend to tmp, then move to user's folder
   fs.readdir(`${process.env.TMP_LOC}`, (err, files)=>{
     files.forEach(file=>{
       if (path.extname(file)===".jpg") {
@@ -156,8 +156,8 @@ router.post("/:userId/projects/:projId/upload_images", upload.array('images'), (
   return res.json({status:true});
 });
 
+// Insert images to db
 router.post("/:userId/projects/:projId/images", (req, res)=>{
-  // Insert images to db, if any
   const values = [];
   let sql = "INSERT INTO images (name, project_id, path) VALUES ";
   let files = fs.readdirSync(`public/customers/${req.body.data.username}/${req.body.data.projName}/images`)
@@ -166,21 +166,13 @@ router.post("/:userId/projects/:projId/images", (req, res)=>{
   }
   files.forEach((file, idx)=>{
     sql += (idx<files.length-1) ? "(?)," : "(?)";
-    values.push([file, req.params.projId, `public/customers/${req.body.data.username}/${req.body.data.projName}/images/${file}`]);
+    values.push([file, req.params.projId, `customers/${req.body.data.username}/${req.body.data.projName}/images/${file}`]);
   })
   con.query(sql, values, (err, result)=>{
     if(err) return res.json({status:false, error:"Cannot insert images to db"});
     return res.json({status:true});
   });
 });
-  
-//   //let files = fs.readdirSync(`public/customers/${username}/${projName}/images`)
-  
-//   if(files.length ===0) {
-//     return res.json({status:false, error:"No files uploaded"})
-//   }
-//   
-// });
   
 router.delete('/:userId/projects/:projId/classes', (req,res)=>{
   const projID = req.params.projId;
