@@ -6,6 +6,7 @@ import multer from 'multer';
 import path from "path";
 import dotenv from "dotenv";
 import fs from 'fs';
+import util from 'util';
 
 dotenv.config()
 const router = express.Router();
@@ -134,9 +135,10 @@ router.post("/:userId/projects/:projId", (req,res)=>{
 });
 
 // Upload from frontend to tmp, then move to user's folder
-router.post("/:userId/projects/:projId/upload_images", upload.array('images'), (req, res)=>{
+router.post("/:userId/projects/:projId/upload_images", upload.array('images'), async (req, res)=>{
   let username = '';
   let projName = '';
+  console.log(req.body)
   if(typeof(req.body.username)=='string') {
     username = req.body.username;
     projName = req.body.projName;
@@ -144,6 +146,7 @@ router.post("/:userId/projects/:projId/upload_images", upload.array('images'), (
     username = req.body.username[0];
     projName = req.body.projName[0];
   }
+  
   fs.readdir(`${process.env.TMP_LOC}`, (err, files)=>{
     files.forEach(file=>{
       if (path.extname(file)===".jpg") {
@@ -153,20 +156,17 @@ router.post("/:userId/projects/:projId/upload_images", upload.array('images'), (
       }
     })
   });
-  return res.json({status:true});
+  return res.json({status:true, result:req.files});
 });
 
 // Insert images to db
 router.post("/:userId/projects/:projId/images", (req, res)=>{
-  const values = [];
+  let values = [];
   let sql = "INSERT INTO images (name, project_id, path) VALUES ";
-  let files = fs.readdirSync(`public/customers/${req.body.data.username}/${req.body.data.projName}/images`)
-  if(files.length ===0) {
-    return res.json({status:true});
-  }
+  let files = req.body.data.files;
   files.forEach((file, idx)=>{
     sql += (idx<files.length-1) ? "(?)," : "(?)";
-    values.push([file, req.params.projId, `customers/${req.body.data.username}/${req.body.data.projName}/images/${file}`]);
+    values.push([file.originalname, req.params.projId, `customers/${req.body.data.username}/${req.body.data.projName}/images/${file.originalname}`]);
   })
   con.query(sql, values, (err, result)=>{
     if(err) return res.json({status:false, error:"Cannot insert images to db"});
