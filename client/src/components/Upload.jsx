@@ -11,23 +11,36 @@ const Upload = () => {
   const userId = useParams().customer_id;
   const projectId = useParams().projId;
   const navigate = useNavigate();
+
+  const convertImgToFileType = async (path)=>{
+    const response = await fetch(path);
+    const contentType = response.headers.get('content-type');
+    const blob = await response.blob();
+    const file = new File([blob], path, {contentType});
+    return file;
+  } 
+
   useEffect(()=>{
     const fetchImages = async()=>{
       const result = await axios.get(`${url}/customer/${userId}/projects/${projectId}/images`);
       if (result.data.status) {
         const tmpImagesPaths = result.data.result.map((oneImg)=>oneImg.path);
-        let tmp = []
-        tmpImagesPaths.forEach((oneImgPath, idx)=>{
-          tmp.push({id:idx, content:`${url}/${oneImgPath}`});
+        let tmpThumbnails = []
+        let tmpImages = []
+        tmpImagesPaths.forEach(async (oneImgPath, idx)=>{
+          console.log(`${url}/${oneImgPath}`)
+          tmpThumbnails.push({id:idx, content:`${url}/${oneImgPath}`});
+          tmpImages.push({id:idx, content: await convertImgToFileType(`${url}/${oneImgPath}`)});
         });
-        setThumbnails(tmp);
+        setThumbnails(tmpThumbnails);
+        setImages(tmpImages)
       }
     }
     fetchImages();
   }, [])
 
   const handleChooseImages = (event)=>{
-    console.log(event.target.files[0])
+    // console.log(event.target.files[0])
     let thumbnailList = [];
     let imgList = []
     for (let i=0; i<event.target.files.length; i++) {

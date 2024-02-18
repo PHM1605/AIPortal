@@ -5,6 +5,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import { adminRouter } from "./routes/AdminRoute.js";
 import { customerRouter } from "./routes/CustomerRoute.js";
+import { apiRouter } from "./routes/API.js"
 import mysql from "mysql2";
 import dotenv from "dotenv";
 import Jwt from "jsonwebtoken";
@@ -34,6 +35,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use('/auth', adminRouter);
 app.use('/customer', customerRouter);
+app.use('/api', apiRouter);
 app.use(express.static('public'));
 
 // Check if user is authenticated or not

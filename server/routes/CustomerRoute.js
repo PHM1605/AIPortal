@@ -138,7 +138,6 @@ router.post("/:userId/projects/:projId", (req,res)=>{
 router.post("/:userId/projects/:projId/upload_images", upload.array('images'), async (req, res)=>{
   let username = '';
   let projName = '';
-  console.log(req.body)
   if(typeof(req.body.username)=='string') {
     username = req.body.username;
     projName = req.body.projName;
@@ -194,5 +193,13 @@ router.delete('/:userId/projects/:projId/images', (req, res)=>{
     return res.json({status:true})
   })
 });
+
+router.delete('/:userId/projects/:projId/results', (req, res)=>{
+  let pathResultDir = `public/customers/${req.body.username}/${req.body.projName}/results`;
+  fs.rmSync(pathResultDir, { recursive: true, force: true });
+  fs.mkdirSync(pathResultDir);
+  return res.json({status:true})
+});
+
 
 export {router as customerRouter};

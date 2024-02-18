@@ -34,7 +34,13 @@ const Classes = () => {
       setError('');
       let classArray = newClass.split(',').map(cl=>cl.replace('\r',''));
       classArray.forEach(cl=>{
-        var randomColor = "#"+Math.floor(Math.random()*16777215).toString(16);
+        var tmp = Math.floor(Math.random()*16777215).toString(16)
+        if (tmp.length==4) {
+          tmp += "00";
+        } else if (tmp.length==5) {
+          tmp += "0"
+        }
+        var randomColor = "#"+tmp;
         tmpClasses.push({color:randomColor, className:cl})
       })
       setClasses([...classes, ...tmpClasses])
