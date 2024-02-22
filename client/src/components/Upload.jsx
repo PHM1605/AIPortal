@@ -28,7 +28,6 @@ const Upload = () => {
         let tmpThumbnails = []
         let tmpImages = []
         tmpImagesPaths.forEach(async (oneImgPath, idx)=>{
-          console.log(`${url}/${oneImgPath}`)
           tmpThumbnails.push({id:idx, content:`${url}/${oneImgPath}`});
           tmpImages.push({id:idx, content: await convertImgToFileType(`${url}/${oneImgPath}`)});
         });

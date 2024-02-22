@@ -75,6 +75,8 @@ const Classes = () => {
   }
 
   const handleDelete = (event)=>{
+
+    console.log(event.target.id)
     setClasses(classes.filter(cl=> cl.className !== event.target.parentNode.id));
   };
 

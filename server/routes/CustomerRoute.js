@@ -72,6 +72,16 @@ router.get('/:userId/projects/:projId/images', (req, res)=>{
   })
 });
 
+router.get('/:userId/projects/:projId/results', (req, res)=>{
+  const projId = req.params.projId;
+  const sql = `SELECT (result) FROM images WHERE project_id=? AND result IS NOT NULL`;
+  con.query(sql, [projId], (err, result)=>{
+    if (err) return res.json({status:false, error:`Query results of project ${projId} fails`});
+    if (result.length==0) return res.json({status:false, error:`No result available`})
+    return res.json({status:true, result:result})
+  })
+});
+
 router.post('/customer_login', (req, res)=>{
   const sql = `SELECT * FROM ${process.env.CUSTOMER_TABLE} WHERE email=?`;
   con.query(sql, [req.body.email], (err, result)=>{
@@ -171,6 +181,16 @@ router.post("/:userId/projects/:projId/images", (req, res)=>{
     if(err) return res.json({status:false, error:"Cannot insert images to db"});
     return res.json({status:true});
   });
+});
+
+router.put("/:userId/projects/:projId/result/:imgId", (req, res)=>{
+  let resultPath = req.body.resultPath;
+  const imgId = req.params.imgId;
+  let sql = "UPDATE images SET result=? WHERE id=?";
+  con.query(sql, [resultPath, imgId], (err, response)=>{
+    if(err) return res.json({status:false, error:"Cannot insert result to db"});
+    return res.json({status:true})
+  })
 });
   
 router.delete('/:userId/projects/:projId/classes', (req,res)=>{

@@ -32,7 +32,7 @@ def letterbox(im, new_shape=(640, 640), color=(114, 114, 114), auto=True, scaleu
 
 def extract(img_list):
   detections = {}
-  session = ort.InferenceSession('spvbvsc93_1211.onnx')
+  session = ort.InferenceSession('abbott1205.onnx')
   for img_path in img_list:
     img0 = cv2.imread(img_path) # BGR
     img = cv2.cvtColor(img0, cv2.COLOR_BGR2RGB)
