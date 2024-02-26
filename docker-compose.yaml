@@ -1,6 +1,6 @@
 services:
   app:
-    image: aidemo:v3
+    image: danghung/aidemo
     container_name: aidemo
     ports:
       - 3000:3000
