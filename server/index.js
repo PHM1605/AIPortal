@@ -13,7 +13,7 @@ import Jwt from "jsonwebtoken";
 const app = express();
 dotenv.config();
 app.use(cors({
-  origin: ["http://localhost:5173", "https://mintek.top"],
+  origin: "*",
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
 }));

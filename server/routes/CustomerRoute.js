@@ -6,7 +6,6 @@ import multer from 'multer';
 import path from "path";
 import dotenv from "dotenv";
 import fs from 'fs';
-import util from 'util';
 
 dotenv.config()
 const router = express.Router();
@@ -158,7 +157,7 @@ router.post("/:userId/projects/:projId/upload_images", upload.array('images'), a
   
   fs.readdir(`${process.env.TMP_LOC}`, (err, files)=>{
     files.forEach(file=>{
-      if (path.extname(file)===".jpg") {
+      if (path.extname(file)===".jpg" || path.extname(file)===".jpeg") {
         fs.rename(`${process.env.TMP_LOC}/${file}`, `public/customers/${username}/${projName}/images/${file}`, err2=>{
           if(err2) return res.json({status:false, error:"Error moving file"});
         })
