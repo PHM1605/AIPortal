@@ -2,5 +2,6 @@ node_modules
 .env
 cert
 server/public
+user_data
 *.onnx
 __pycache__

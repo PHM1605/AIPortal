@@ -113,7 +113,10 @@ router.post('/customer_login', (req, res)=>{
 router.post('/:userId/projects', (req, res)=>{
   const sql = "INSERT INTO projects (name, user_id, type_id) VALUES (?)";
   con.query(sql, [[req.body.projName, req.params.userId, req.body.type_id]], (err, result)=>{
-    if(err) return res.json({status:false, error:"Insert db error"});
+    if(err) {
+      console.log('err', err)
+       return res.json({status:false, error:"Insert db error"});
+    }
     // create empty folder
     const folderName = `./public/customers/${req.body.username}/${req.body.projName}`;
     if (!fs.existsSync(folderName)) {
@@ -157,8 +160,8 @@ router.post("/:userId/projects/:projId/upload_images", upload.array('images'), a
   
   fs.readdir(`${process.env.TMP_LOC}`, (err, files)=>{
     files.forEach(file=>{
-      if (path.extname(file)===".jpg" || path.extname(file)===".jpeg") {
-        fs.rename(`${process.env.TMP_LOC}/${file}`, `public/customers/${username}/${projName}/images/${file}`, err2=>{
+      if (path.extname(file)===".jpg") {
+        fs.rename(`${process.env.TMP_LOC}/${file}`, `./public/customers/${username}/${projName}/images/${file}`, err2=>{
           if(err2) return res.json({status:false, error:"Error moving file"});
         })
       }
@@ -177,7 +180,10 @@ router.post("/:userId/projects/:projId/images", (req, res)=>{
     values.push([file.originalname, req.params.projId, `customers/${req.body.data.username}/${req.body.data.projName}/images/${file.originalname}`]);
   })
   con.query(sql, values, (err, result)=>{
-    if(err) return res.json({status:false, error:"Cannot insert images to db"});
+    if(err) {
+      console.log('err', err)
+      return res.json({status:false, error:"Cannot insert images to db"});
+    }
     return res.json({status:true});
   });
 });

@@ -1,4 +1,7 @@
 #!/bin/bash
-
+ls -la /app
+ls -la /app/server
+ls -la /app/client
+ls -la /client/dist
 python apiServer/main.py &
-node server/index.js 
+cd server && node index.js 

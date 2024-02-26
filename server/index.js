@@ -10,6 +10,16 @@ import mysql from "mysql2";
 import dotenv from "dotenv";
 import Jwt from "jsonwebtoken";
 
+let dir = process.env.TMP_LOC;
+if (!fs.existsSync(dir)){
+    fs.mkdirSync(dir);
+}
+dir = './public/customers';
+if (!fs.existsSync(dir)){
+    fs.mkdirSync(dir);
+}
+
+
 const app = express();
 dotenv.config();
 app.use(cors({
@@ -21,7 +31,13 @@ const con = mysql.createConnection({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PWD,
-  database: process.env.DB_NAME
+  database: process.env.DB_NAME,
+  ssl : {
+    // ca : fs.readFileSync(__dirname + '/ca-server.pem'),
+    // key : fs.readFileSync(__dirname + '/client-key.pem'),
+    // cert : fs.readFileSync(__dirname + '/client-cert.pem'),
+    rejectUnauthorized: false
+}
 });
 con.connect((err)=>{
   if(err) {
@@ -60,11 +76,11 @@ app.get('/verify', verify_user, (req, res)=>{
 
 if (process.env.ENV === 'prd') {
   app.use(express.static("../client/dist"));
-  const sslServer = https.createServer({
-    key: fs.readFileSync('./cert/key.pem'),
-    cert: fs.readFileSync('./cert/cert.pem')
-  }, app);
-  sslServer.listen(process.env.PORT, () =>
+  // const sslServer = https.createServer({
+  //   key: fs.readFileSync('./cert/key.pem'),
+  //   cert: fs.readFileSync('./cert/cert.pem')
+  // }, app);
+  app.listen(process.env.PORT, () =>
     console.log(`Example app listening on ${process.env.PUBLIC_URL}`)
   );
 } else if(process.env.ENV === 'dev') {
