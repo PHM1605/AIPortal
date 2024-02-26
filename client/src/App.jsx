@@ -12,7 +12,7 @@ import Classes from './components/Classes';
 import Upload from './components/Upload';
 import Analyze from './components/Analyze';
 
-const env = 'dev'
+const env = 'prd'
 const url = (env==='prd') ? 'https://mintek.top' : 'http://localhost:3000';
 
 function App() {
