@@ -23,7 +23,8 @@ app.add_middleware(CORSMiddleware,
 async def root():
     return {"message": "Inner ML API"}
 
-serverPath = 'D:/Minh/Projects/AIPortal/server/public/'
+# serverPath = 'D:/Minh/Projects/AIPortal/server/public/'
+serverPath = '/app/server/public/'
 
 @app.post('/result')
 async def get_result(imagesInfo: ImagesInfo):

@@ -79,7 +79,7 @@ const Upload = () => {
         values
       });
       if(result_insert_db.data.status) {
-        console.log("OK");
+        console.log(result_insert_db.data);
       } else {
         alert(result_insert_db.data.error)
       }

@@ -1,10 +1,18 @@
 FROM nikolaik/python-nodejs:python3.12-nodejs18
 
 # RUN npm install -g yarn
-COPY . ./
+WORKDIR /app
+ADD apiServer/requirements.txt apiServer/requirements.txt
 RUN pip install -r apiServer/requirements.txt
 # RUN cd client && yarn && yarn build
-COPY start.sh /start.sh
-RUN chmod +x /start.sh
+ADD server/package.json server/package.json
+RUN cd server && yarn
+RUN apt-get update && apt-get install ffmpeg libsm6 libxext6  -y
 
-CMD ["/start.sh"]
+COPY . /app/
+ADD server/.env .env
+RUN chmod +x /app/start.sh
+
+RUN cd client && yarn && yarn build
+RUN mkdir -p public/tmp
+CMD ["/app/start.sh"]
