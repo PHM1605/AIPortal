@@ -29,6 +29,7 @@ app.use(cors({
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
 }));
+
 const con = mysql.createConnection({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
@@ -78,12 +79,12 @@ app.get('/verify', verify_user, (req, res)=>{
 
 if (process.env.ENV === 'home' || process.env.ENV==='cloud') {
   app.use(express.static("../client/dist"));
-  // const sslServer = https.createServer({
-  //   key: fs.readFileSync('./cert/key.pem'),
-  //   cert: fs.readFileSync('./cert/cert.pem')
-  // }, app);
-  app.listen(process.env.PORT, () =>
-    console.log(`Example app listening on ${process.env.PUBLIC_URL}`)
+  const sslServer = https.createServer({
+    key: fs.readFileSync('./cert/key.pem'),
+    cert: fs.readFileSync('./cert/cert.pem')
+  }, app);
+  sslServer.listen(3000, () =>
+    console.log(`Example app listening on ${process.env.URL}`)
   );
 } else if(process.env.ENV === 'local') {
   app.listen(3000, ()=>console.log(`Example app listening on ${process.env.URL}`));

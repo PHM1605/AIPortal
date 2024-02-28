@@ -12,7 +12,8 @@ import Classes from './components/Classes';
 import Upload from './components/Upload';
 import Analyze from './components/Analyze';
 
-const url=  'http://localhost:3000';
+// const url=  'http://localhost:3000';
+const url= 'https://mintek.top'
 // const url = 'https://aidemo.qc.bonbonshop.vn';
 
 function App() {

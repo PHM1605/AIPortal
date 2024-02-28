@@ -28,6 +28,7 @@ const Login = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    console.log("HEREH")
     axios.post(`${url}/customer/customer_login`, values)
     .then(result =>{
       if(result.data.status) {
