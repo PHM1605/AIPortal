@@ -10,6 +10,8 @@ import mysql from "mysql2";
 import dotenv from "dotenv";
 import Jwt from "jsonwebtoken";
 
+dotenv.config();
+
 let dir = process.env.TMP_LOC;
 if (!fs.existsSync(dir)){
     fs.mkdirSync(dir);
@@ -19,11 +21,11 @@ if (!fs.existsSync(dir)){
     fs.mkdirSync(dir);
 }
 
-
 const app = express();
-dotenv.config();
+
 app.use(cors({
-  origin: "*",
+  //origin: "*",
+  origin: ["http://localhost:5173", "*"],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
 }));
@@ -74,7 +76,7 @@ app.get('/verify', verify_user, (req, res)=>{
   return res.json({status:true, role:req.role, customer_id:req.customer_id, username:req.username})
 })
 
-if (process.env.ENV === 'prd') {
+if (process.env.ENV === 'home' || process.env.ENV==='cloud') {
   app.use(express.static("../client/dist"));
   // const sslServer = https.createServer({
   //   key: fs.readFileSync('./cert/key.pem'),
@@ -83,8 +85,8 @@ if (process.env.ENV === 'prd') {
   app.listen(process.env.PORT, () =>
     console.log(`Example app listening on ${process.env.PUBLIC_URL}`)
   );
-} else if(process.env.ENV === 'dev') {
-  app.listen(process.env.PORT, ()=>console.log(`Example app listening on ${process.env.LOCAL_URL}:${process.env.PORT}`));
+} else if(process.env.ENV === 'local') {
+  app.listen(3000, ()=>console.log(`Example app listening on ${process.env.URL}`));
 }
 
 export {con};

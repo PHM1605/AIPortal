@@ -12,8 +12,8 @@ import Classes from './components/Classes';
 import Upload from './components/Upload';
 import Analyze from './components/Analyze';
 
-const env = 'prd'
-const url = (env==='prd') ? 'https://aidemo.qc.bonbonshop.vn' : 'http://localhost:3000';
+const url=  'http://localhost:3000';
+// const url = 'https://aidemo.qc.bonbonshop.vn';
 
 function App() {
   return (

@@ -21,7 +21,7 @@ const upload = multer({storage:storage});
 
 router.get('/:id', (req, res)=>{
   const id = req.params.id;
-  const sql = `SELECT * FROM ${process.env.CUSTOMER_TABLE} WHERE id=?`;
+  const sql = `SELECT * FROM customer WHERE id=?`;
   con.query(sql, [id], (err, result)=>{
     if(err) return res.json({status:false, error:"Customer id not exist"});
     return res.json({status:true, result:result})
@@ -82,7 +82,7 @@ router.get('/:userId/projects/:projId/results', (req, res)=>{
 });
 
 router.post('/customer_login', (req, res)=>{
-  const sql = `SELECT * FROM ${process.env.CUSTOMER_TABLE} WHERE email=?`;
+  const sql = `SELECT * FROM customer WHERE email=?`;
   con.query(sql, [req.body.email], (err, result)=>{
     if(err) {
       return res.json({status:false, error:"Query customer error"});

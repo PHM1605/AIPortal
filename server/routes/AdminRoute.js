@@ -6,7 +6,7 @@ import fs from "fs";
 const router = express.Router();
 
 router.get('/customer', (req, res)=>{
-  const sql = `SELECT * FROM ${process.env.CUSTOMER_TABLE}`;
+  const sql = `SELECT * FROM customer`;
   con.query(sql, (err, result)=>{
     if(err) return res.json({status:false, error: "Select customers error"});
     return res.json({status:true, result: result});
@@ -14,7 +14,7 @@ router.get('/customer', (req, res)=>{
 });
 
 router.post('/add_customer', (req, res)=>{  
-  const sql = `INSERT INTO ${process.env.CUSTOMER_TABLE} (username, email, password) VALUES (?)`;
+  const sql = `INSERT INTO customer (username, email, password) VALUES (?)`;
   bcrypt.hash(req.body.password, 10, (err, hash)=>{
     if(err) return res.json({status:false, error:"Query error"});
     const values = [

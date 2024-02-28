@@ -11,8 +11,12 @@ RUN apt-get update && apt-get install ffmpeg libsm6 libxext6  -y
 
 COPY . /app/
 ADD server/.env .env
+ADD start.sh /app/start.sh
 RUN chmod +x /app/start.sh
-
-RUN cd client && yarn && yarn build
+RUN ls -la /app > list_app.txt
+RUN echo list_app.txt
+# RUN cd client && yarn && yarn build
 RUN mkdir -p public/tmp
-CMD ["/app/start.sh"]
+RUN echo "ls -la /app" > test.sh
+RUN chmod +x test.sh
+CMD ["start.sh"]
