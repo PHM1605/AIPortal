@@ -35,11 +35,11 @@ def extract(img_list):
   detections = {}
   session = ort.InferenceSession('abbott0229.onnx')
   for img_path in img_list:
-    if not img_path.lower().endswith(('.png', '.jpg', '.jpeg')):
-      print(os.path.dirname(img_path))
-      output_dir = os.path.dirname(img_path)
-      img_path = convert_webp_to_jpg(img_path, output_dir)
-    img0 = cv2.imread(img_path) # BGR
+    if img_path.lower().endswith(('.png', '.jpg', '.jpeg')):
+      img0 = cv2.imread(img_path)
+    else:
+      img0 = convert_webp_to_jpg(img_path)
+
     img = cv2.cvtColor(img0, cv2.COLOR_BGR2RGB)
     H, W, C = img.shape
     img, ratio, dwdh = letterbox(img, auto=False)

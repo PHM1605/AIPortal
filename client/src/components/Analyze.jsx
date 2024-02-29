@@ -7,24 +7,24 @@ import ImageSlider from './ImageSlider';
 const Analyze = () => {
   // [{idx:0, path:'xxx'}, {...}]
   const [results, setResults] = useState([]);
+  const [numeric, setNumeric] = useState([]);
   const userId = useParams().customer_id;
   const projectId = useParams().projId;
 
-  useEffect(()=>{
-    const fetchResult = async () =>{
-      const fetchResult = await axios.get(`${url}/customer/${userId}/projects/${projectId}/results`)
-      if(fetchResult.data.status ) {
-        let tmp = fetchResult.data.result.map((res,i)=>({
-          idx: i,
-          path: `${url}/${res.result}`
-        }));
-        console.log(path)
-        setResults(tmp);
-      }
-    }
-    fetchResult();
+  // useEffect(()=>{
+  //   const fetchResult = async () =>{
+  //     const fetchResult = await axios.get(`${url}/customer/${userId}/projects/${projectId}/results`)
+  //     if(fetchResult.data.status ) {
+  //       let tmp = fetchResult.data.result.map((res,i)=>({
+  //         idx: i,
+  //         path: `${url}/${res.result}`
+  //       }));
+  //       setResults(tmp);
+  //     }
+  //   }
+  //   fetchResult();
     
-  }, [])
+  // }, [])
 
   const handleSubmit = async (event)=>{
     event.preventDefault();
@@ -55,11 +55,13 @@ const Analyze = () => {
       });
     })
 
+    // for resulting images
     let tmp = [];
     tmpResults.data.result.forEach((res,i)=>{
       tmp.push({idx: i, path: `${url}/${res}`})
     })
     setResults(tmp);
+    setNumeric(tmpResults.data.numeric);
   }
 
   return (
@@ -70,7 +72,7 @@ const Analyze = () => {
         </div>
 
         <div>
-          {results && results.length>0? <ImageSlider imgs={results}/>:<></>}
+          {results && results.length>0? <ImageSlider imgs={results} numeric={numeric}/>:<></>}
         </div>
         
       </form>

@@ -9,7 +9,7 @@ router.post('/get_result', async (req, res)=>{
     paths:req.body.imagesPaths, 
     classes:req.body.classes
   });
-  return res.json({status:true, result:response.data.result})
+  return res.json({status:true, result:response.data.result, numeric:response.data.numeric})
 })
 
 export {router as apiRouter};

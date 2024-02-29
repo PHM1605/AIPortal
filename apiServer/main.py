@@ -29,15 +29,20 @@ dataPath="D:/Minh/Projects/AIPortal/server/public/"
 @app.post('/result')
 async def get_result(imagesInfo: ImagesInfo):
     imgList = [dataPath+p for p in imagesInfo.paths]
+    numericList = []
     classes = imagesInfo.classes
     detections = extract(imgList)
     for i, currImgPath in enumerate(imgList):
         imgName = os.path.basename(currImgPath)
-        img = extract_image(currImgPath, detections[imgName], classes)
+        img, numeric  = extract_image(currImgPath, detections[imgName], classes)
         outputPath = os.path.join(os.path.dirname(os.path.dirname(currImgPath)), 'results', imgName)
-        cv2.imwrite(outputPath, img)
+        numericList.append(numeric)
+        img.save(outputPath)
 
-    return {"result":[path.replace('images', 'results') for path in imagesInfo.paths]}
+    return {
+        "result": [path.replace('images', 'results') for path in imagesInfo.paths],
+        "numeric": numericList
+    }
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0",port=8000)
