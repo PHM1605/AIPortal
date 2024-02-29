@@ -18,6 +18,7 @@ const Analyze = () => {
           idx: i,
           path: `${url}/${res.result}`
         }));
+        console.log(path)
         setResults(tmp);
       }
     }

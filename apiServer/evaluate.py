@@ -33,9 +33,10 @@ def letterbox(im, new_shape=(640, 640), color=(114, 114, 114), auto=True, scaleu
 
 def extract(img_list):
   detections = {}
-  session = ort.InferenceSession('abbott0227.onnx')
+  session = ort.InferenceSession('abbott0229.onnx')
   for img_path in img_list:
     if not img_path.lower().endswith(('.png', '.jpg', '.jpeg')):
+      print(os.path.dirname(img_path))
       output_dir = os.path.dirname(img_path)
       img_path = convert_webp_to_jpg(img_path, output_dir)
     img0 = cv2.imread(img_path) # BGR
