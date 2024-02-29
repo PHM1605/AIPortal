@@ -1,6 +1,7 @@
 import cv2, os
 import numpy as np
 import onnxruntime as ort
+from utils import convert_webp_to_jpg
 
 def letterbox(im, new_shape=(640, 640), color=(114, 114, 114), auto=True, scaleup=True, stride=32):
     # Resize and pad image while meeting stride-multiple constraints
@@ -34,7 +35,9 @@ def extract(img_list):
   detections = {}
   session = ort.InferenceSession('abbott0227.onnx')
   for img_path in img_list:
-    print("IMG_PATH:", img_path)
+    if not img_path.lower().endswith(('.png', '.jpg', '.jpeg')):
+      output_dir = os.path.dirname(img_path)
+      img_path = convert_webp_to_jpg(img_path, output_dir)
     img0 = cv2.imread(img_path) # BGR
     img = cv2.cvtColor(img0, cv2.COLOR_BGR2RGB)
     H, W, C = img.shape
