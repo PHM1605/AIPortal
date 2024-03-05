@@ -13,7 +13,7 @@ function ImageSlider(props){
 
   return (
     <div className="d-flex flex-row">
-      <div className="d-flex flex-column">
+      <div className="d-flex flex-column" style={{height:"700px", overflowY:"scroll"}}>
         {
           props.imgs.map(
             (img, i)=>
